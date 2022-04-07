@@ -14,7 +14,9 @@ kpop |>
     name == "SEVENTEEN" ~ "bg"))%>%
 #add 4th gen and 3rd gen identifiers 
 # add txt and svt along with other short hand 
-  #add debut date 
+#add debut date 
+#write dataset into data folder 
+
   
 
   
@@ -48,6 +50,11 @@ follow<-
 
 #smaller table 
 ggsave("font_test2_10x10_300.png", plot = follow, width = 20, height = 20, units = "in", dpi = 300)
+
+
+
+
+
 
 
 

@@ -1,12 +1,11 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "The Differences in Popular Musical Requiremnts between 3rd and 4th Generation Kpop Groups"
+subtitle: "Groups are seperated further between girl and boy groups"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Oluwabusayomi Adekuajo 
+thanks: "Code and data are available at: https://github.com/rubyzero10/Final_Starter_Fold.git."
 date: "`r format(Sys.time(), '%d %B %Y')`"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "Kpop has gained rapid popularity globally which is evident through setting new records and receiving public recognition on an international scale. This paper analyzes the possible changes in musicality represented in the shift between 3rd and 4th generation Kpop idols. Finidngs display that... Understanding current and evolving trends in this economically growing industry creates a plotform to predict popularity in groups to debute in the upcoming 5th generation. \\par \\textbf {Keywords:} music analysis, kpop, spotify, generational change"
 output:
   bookdown::pdf_document2
 toc: FALSE
@@ -14,80 +13,62 @@ bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE)
 
-library(tidyverse)
-library(palmerpenguins)
+#install.packages("spotifyr")
+#install.packages("tidyverse")
+#library(spotifyr)
+#library(tidyverse)
+#library(usethis)
 ```
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. For instance, Section \@ref(data). R Markdown automatically makes the sections lower case and adds a dash to spaces to generate labels, for instance, Section \@ref(first-discussion-point). 
+Kpop has become a worldwide phenomenon with its groups constantly breaking new records on a global scale. What was once popular mainly in South Korean or Asian countries has found popularity amount the public with hybe continuously growing. The timeline of this growth can monitored through generations, for which there are currently four. The First Generation, which dates from the 1990s to the mid 2000s targeted mainly domestic and neighboring youth markets and consisted of family owned companies (cite) esiently it was the founding of such culture. During the second generation, things started to expand outside Korea as Youtube became popular early 2010 and international fans could be reached. This allowed for the starting target audience for third generation boy and girl group to be on an international scale involving social media platforms and streaming availability. From here on the large fanbase involved in Kpop can be seen across the nation and is it its peak currently in the 4th generation. Understanding the trends in music distinguishable between active generation of popular idols has insight to predict group popularity for the upcoming 5th generation. 
 
+In this accelerating cycle, younger listeners, not only adopt particular songs or genres as badges of distinction and identity but also possess the discretionary income that will allow them to express their preferences and became a significant sector in the economy of music’s consumption (cite). In this paper, we analyze the title tracks of the 3rd generation and 4th generation Kpop groups which are amongst the most followed and popular on spotify. It is assumed that these groups will have the largest fan bases in the community, contributing the most to the economy along with attracting new fans to the genre as a whole. Top top 20 groups was present in raw data in which groups from all generation existed. 3rd and 4rd generation groups were selected from which they were further separated into boy girl group. This is due to different musical styles represented by each gender; the change in musical expression within each gendered group between the generation was also of interest. 
+
+
+We find that, generally …  (have to finish making graphs find results)
+
+
+The remainder of the paper is split into five sections. Section \@ref(data) explains data collection methodology, potential bias and ethics issues, as well as characteristics of selected data. Section \@ref(model) discusses the models used to produce results and investigate the transition of music between generation of kpop. Section \@ref(results)presents the findings from our methodology. Section \@ref(discussion) attempts to understand the results as well as explain the weaknesses and limitation in interpreting findings of the paper. It also showcases next steps to enhance and expand on the findings of the report
 
 
 # Data
 
-Our data is of penguins (Figure \@ref(fig:bills)).
+Our data is of K pop(Figure \@ref(fig:groups)).
 
-```{r bills, fig.cap="Bills of penguins", echo = FALSE}
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+```{r groups, fig.cap="Bills of penguins", echo = FALSE}
+
 ```
 
-Talk more about it.
 
-Also bills and their average (Figure \@ref(fig:billssssss)). (Notice how you can change the height and width so they don't take the whole page?)
 
 ```{r billssssss, fig.cap="More bills of penguins", echo = FALSE, fig.width=8, fig.height=4}
 
-# This needs to be about the random data tha tI sasmpled?
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
 ```
 
-Talk way more about it. 
 
 
 
 # Model
-
-\begin{equation}
-Pr(\theta | y) = \frac{Pr(y | \theta) Pr(\theta)}{Pr(y)}  (\#eq:bayes)
-\end{equation}
-
-Equation \@ref(eq:bayes) seems useful, eh?
-
-Here's a dumb example of how to use some references: In paper we run our analysis in `R` [@citeR]. We also use the `tidyverse` which was written by @thereferencecanbewhatever If we were interested in baseball data then @citeLahman could be useful. 
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
 # Results
 
 # Discussion
 
-## First discussion point
+## Consumption differences 
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
 
-## Second discussion point
+## The Role of Gender 
 
-## Third discussion point
+## International Influences 
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
+
 
 \newpage
 

@@ -1,17 +1,12 @@
 #generate simulated data of top popularity amoung third and fourth generation kpop groups 
 
-#### Preamble ####
-# Purpose: Clean the survey data downloaded from [...UPDATE ME!!!!!]
-# Author: Rohan Alexander [CHANGE THIS TO YOUR NAME!!!!]
-# Data: 3 January 2021
-# Contact: rohan.alexander@utoronto.ca [PROBABLY CHANGE THIS ALSO!!!!]
-# License: MIT
-# Pre-requisites: 
-# - Need to have downloaded the ACS data and saved it to inputs/data
-# - Don't forget to gitignore it!
-# - Change these to yours
-# Any other information needed?
+library(knitr)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
 
+
+kpop_mid <- read.csv(file="inputs/data/raw_data_popular.csv", header=T)
 set.seed(7217)
 
 simulated_dataset <-
@@ -36,3 +31,5 @@ simulated_dataset <-
   ) |>
   select(kpop_group, popularity, followers, overall_score) |>
   arrange(-overall_score)
+
+simulated_dataset

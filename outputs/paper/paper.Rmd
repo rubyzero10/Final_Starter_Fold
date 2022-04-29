@@ -1,5 +1,5 @@
 ---
-title: "The Differences in Desired Audio Features between 3rd and 4th Generation Kpop Groups"
+title: "The Differences in Desired Audio Features Between 3rd and 4th Generation Kpop Groups"
 subtitle: "Data mainly incorporates international input"
 author: 
   - Oluwabusayomi Adekuajo 

@@ -3,7 +3,7 @@ title: "The Differences in Desired Audio Features Between 3rd and 4th Generation
 subtitle: "Data mainly incorporates international input"
 author: 
   - Oluwabusayomi Adekuajo 
-thanks: "Code and data are available at: https://github.com/rubyzero10/Final_Starter_Fold.git."
+thanks: "Code and data are available at: https://github.com/rubyzero10/Kpop_audio_features.git."
 date: "`r format(Sys.time(), '%d %B %Y')`"
 abstract: "Kpop has gained rapid popularity globally which is evident through setting new records and receiving public recognition on an international scale. This paper analyzes the possible changes in musicality represented in the shift between 3rd and 4th generation Kpop idols. Finidngs display that 4th generation music is louder, but also has less energy. Understanding current and evolving trends in this economically growing industry creates a plotform to predict popularity in groups to debute in the upcoming 4th generation. \\par \\textbf {Keywords:} music analysis, audio feature, 3rd generation kpop, 4th generation kpop, spotify, generational change"
 output:
@@ -541,7 +541,7 @@ Extract of the questions from @gebru2021datasheets
 1. *Has the dataset been used for any tasks already? If so, please provide a description.*
 	- The  dataset has not been used for any tasks already 
 2. *Is there a repository that links to any or all papers or systems that use the dataset? If so, please provide a link or other access point.*
-	- https://github.com/rubyzero10/Final-paper-kpop.git
+	- https://github.com/rubyzero10/Kpop_audio_features.git
 3. *What (other) tasks could the dataset be used for?*
 	- The dataset could be used to see what features determine popularity of track. 
 4. *Is there anything about the composition of the dataset or the way it was collected and preprocessed/cleaned/labeled that might impact future uses? For example, is there anything that a dataset consumer might need to know to avoid uses that could result in unfair treatment of individuals or groups (for example, stereotyping, quality of service issues) or other risks or harms (for example, legal risks, financial harms)? If so, please provide a description. Is there anything a dataset consumer could do to mitigate these risks or harms?*

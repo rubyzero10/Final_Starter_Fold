@@ -104,6 +104,9 @@ popular_data <- rbind(kpop_mid, add)
 
 
 write.csv(popular_data, "inputs/data/raw_data_popular.csv", row.names=FALSE)
+write.csv(popular_data, "outputs/paper/raw_data_popular.csv", row.names=FALSE)
+
+kpop <- read_csv("inputs/data/raw_data_popular.csv")
 
 #Now find top tracks for each artists 
 
@@ -186,8 +189,9 @@ audio_data <-
          gender, generation, popularity, album.release_date )
 
 write.csv(audio_data, "inputs/data/raw_data_audio.csv", row.names=FALSE)
+write.csv(audio_data, "outputs/paper/raw_data_audio.csv", row.names=FALSE)
 
-
+data <- read.csv(file="outputs/paper/raw_data_audio.csv", header=T)
 
 
 

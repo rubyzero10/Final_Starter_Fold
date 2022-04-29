@@ -1,80 +1,593 @@
 ---
-title: "The Differences in Popular Musical Requiremnts between 3rd and 4th Generation Kpop Groups"
-subtitle: "Groups are seperated further between girl and boy groups"
+title: "The Differences in Desired Audio Features between 3rd and 4th Generation Kpop Groups"
+subtitle: "Data mainly incorporates international input"
 author: 
   - Oluwabusayomi Adekuajo 
 thanks: "Code and data are available at: https://github.com/rubyzero10/Final_Starter_Fold.git."
 date: "`r format(Sys.time(), '%d %B %Y')`"
-abstract: "Kpop has gained rapid popularity globally which is evident through setting new records and receiving public recognition on an international scale. This paper analyzes the possible changes in musicality represented in the shift between 3rd and 4th generation Kpop idols. Finidngs display that... Understanding current and evolving trends in this economically growing industry creates a plotform to predict popularity in groups to debute in the upcoming 5th generation. \\par \\textbf {Keywords:} music analysis, kpop, spotify, generational change"
+abstract: "Kpop has gained rapid popularity globally which is evident through setting new records and receiving public recognition on an international scale. This paper analyzes the possible changes in musicality represented in the shift between 3rd and 4th generation Kpop idols. Finidngs display that 4th generation music is louder, but also has less energy. Understanding current and evolving trends in this economically growing industry creates a plotform to predict popularity in groups to debute in the upcoming 4th generation. \\par \\textbf {Keywords:} music analysis, audio feature, 3rd generation kpop, 4th generation kpop, spotify, generational change"
 output:
   bookdown::pdf_document2
-toc: FALSE
+toc: TRUE
 bibliography: references.bib
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE, message = FALSE}
 #knitr::opts_chunk$set(echo = TRUE)
-
-#install.packages("spotifyr")
-#install.packages("tidyverse")
-#library(spotifyr)
-#library(tidyverse)
-#library(usethis)
+library(spotifyr)
+library(knitr)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(patchwork)
+library(janitor)
+library(lubridate)
+library(modelsummary)
+library(tidymodels)
+kpop <- read.csv(file="raw_data_popular.csv", header=T)
+kpop_a <- read_csv("raw_data_audio.csv")
+kpop_a <- 
+  kpop_a |>
+  mutate(key = factor(key),
+         mode = factor(mode), 
+         gender = factor(gender), 
+         generation = factor(generation)
+  )
 ```
 
 # Introduction
 
-Kpop has become a worldwide phenomenon with its groups constantly breaking new records on a global scale. What was once popular mainly in South Korean or Asian countries has found popularity amount the public with hybe continuously growing. The timeline of this growth can monitored through generations, for which there are currently four. The First Generation, which dates from the 1990s to the mid 2000s targeted mainly domestic and neighboring youth markets and consisted of family owned companies (cite) esiently it was the founding of such culture. During the second generation, things started to expand outside Korea as Youtube became popular early 2010 and international fans could be reached. This allowed for the starting target audience for third generation boy and girl group to be on an international scale involving social media platforms and streaming availability. From here on the large fanbase involved in Kpop can be seen across the nation and is it its peak currently in the 4th generation. Understanding the trends in music distinguishable between active generation of popular idols has insight to predict group popularity for the upcoming 5th generation. 
+K-pop has become a worldwide phenomenon with its groups constantly breaking new records on a global scale. What was once known exclusively in South Korean and Asian countries has found popularity internationally, known as the Korean wave, which is continuously growing. The timeline of this growth can be monitored through generations, for which there are currently four. The First Generation, which dates from the 1990s to the mid 2000s targeted mainly domestic and neighboring youth markets and consisted of family owned companies (@genre) essentially it was the founding of such culture. During the second generation, things started to expand outside Korea as YouTube became popular in the early 2010s and international fans could be reached. As the third generation consists of debuted groups from 2012 to 2018, this allowed for the starting target audience to be on an international scale. This was demonstrated with the involvement of social media platforms and increase of streaming availability. Represented by those who have debuted from 2018 to present day, the 4th generation is currently the peak of K-pop, with the its fanbase reaching national and international scales.
 
-In this accelerating cycle, younger listeners, not only adopt particular songs or genres as badges of distinction and identity but also possess the discretionary income that will allow them to express their preferences and became a significant sector in the economy of music’s consumption (cite). In this paper, we analyze the title tracks of the 3rd generation and 4th generation Kpop groups which are amongst the most followed and popular on spotify. It is assumed that these groups will have the largest fan bases in the community, contributing the most to the economy along with attracting new fans to the genre as a whole. Top top 20 groups was present in raw data in which groups from all generation existed. 3rd and 4rd generation groups were selected from which they were further separated into boy girl group. This is due to different musical styles represented by each gender; the change in musical expression within each gendered group between the generation was also of interest. 
-
-
-We find that, generally …  (have to finish making graphs find results)
+Other than just the dates of their debut what separates generations of K-pop. Over the course of time, trends in music become distinguishable. In this accelerating cycle, younger listeners, not only adopt particular songs or genres as badges of distinction and identity but also possess the discretionary income that will allow them to express their preferences and became a significant sector in the economy of music’s consumption (@john). In this paper, we analyze the title tracks of the 3rd generation and 4th generation K-pop groups which are amongst the most followed and popular on Spotify. It is assumed that these groups will have the largest fan bases in the community, contributing the most to the economy along with attracting new fans to the genre as a whole. Top 20 K-pop groups were presented in data collected directly from Spotify, from whcih, 3rd and 4rd generation groups were selected. Other popular groups were added to total observable groups. The goal of the study was to determine the audio features that could predict whether a group was in 3rd or 4th generation. We find that, generally 3rd generation groups have softer music that is more energic and in key G. As 4th generation is suggested to continue till 2025, implications of this study can help groups that will debut within timeframe of interest develop music that will be successful in the market. 
 
 
-The remainder of the paper is split into five sections. Section \@ref(data) explains data collection methodology, potential bias and ethics issues, as well as characteristics of selected data. Section \@ref(model) discusses the models used to produce results and investigate the transition of music between generation of kpop. Section \@ref(results)presents the findings from our methodology. Section \@ref(discussion) attempts to understand the results as well as explain the weaknesses and limitation in interpreting findings of the paper. It also showcases next steps to enhance and expand on the findings of the report
-
+The remainder of the paper is split into the following sections. Section \@ref(data) explains data source and collection, along with characteristics of selected data Section \@ref(model) discusses the methods used to obtain final model investigating the transition of music between generation of K-pop. Section \@ref(results) presents the findings from our data analysis and model. Section \@ref(discussion) attempts to understand the results as well as explain the weaknesses and limitation in interpreting findings of the paper. It also showcases next steps to enhance and expand on the findings of the report
 
 # Data
 
-Our data is of K pop(Figure \@ref(fig:groups)).
+Data was obtained through the Spotify Web API for developers @spot. Analysis of report was done through the use of the R statistical programming language @citeR, along with other packages, ggplot2 @gg, knitr @citeknit, kableExtra @citeextra, tidyr @citetid, dplyr @citedplyr, modelsummary @mod, tidymodels @modtin, patchwork @patch and tidyverse @citetidyverse, that aided to clean and manipulate dataset. This report uses 194 observations of 17 variables from selected popular tracks' audio features. 
 
-```{r groups, fig.cap="Bills of penguins", echo = FALSE}
+## Data Source 
 
+The Spotify Web API for developers is known as a RESTful API, or a Representational state transfer API. It is an interface that allows for the retrieval and management of data using a standard HTTP protocol to access internet available data. Using REST principles, the Spotify Web API provides a set of endpoints each with its own unique path, that returns metadata in regards to music artists, albums, tracks, playlists and saved music directly from the Spotify Data Catalogue. As Spotify information is protected, authorization is required to access Spotify data and features. A Spotify account, along with a Spotify Developer account are used to inquire a  ‘Client ID’ and a ‘Client Secret’, which are needed in order to be permitted to access the Spotify API. 
+
+## Strengths 
+
+The Spotify Web API allows for huge amount of available data to be collected. Simply through making calls through the Web API any information regarding an artist, track, playlist, genre, and much more can be received. With the ability to gather such a multitude and diversity of music data, there is an endless amount of research that can be done. The process to obtain such data is quite simple as it does not require much effort; access to data is also free. As data is obtained directly through the Spotify catalog it is not prone to measurement error. Spotify is one the most used music platforms, making data extremely relevant as it is the direct output of its users. Variables like followers and popularity represent updated real-life information of the demand of an artist, allowing implications of the study to affect not only current artist, but upcoming artists. 
+
+## Weaknesses
+
+While Spotify may be the most popular streaming service it is not available everywhere. The main interest of this report involves Korean popular music. Though K-pop is a growing on an international scale, the main target markets include South Korea itself, China, Japan, along with other neighboring Asian countries. Spotify however had only launched in South Korea as of Feb 2, 2022 and is still not available in China. This indicates that Spotify is not the main source of music streaming in the country that it involves along with one of the biggest markets in Asia. Thus, this data does not capture the true population of listeners, and mainly represents an international viewpoint. 
+
+## Data collection
+
+After access was acquired, the appropriate HTTP verb used to retrieve resources was GET. As the main music genre of interest was Korean pop, the string parameter “k-pop” was imputed and a list containing 20 observations of K-pop artists and 12 variables of information on the artists were generated. Only K-pop groups that are considered to be 3rd or 4th generation were of interest, and such all artist in list that did not meet these requirements were removed, this included solo artists as well. This reduced the list to involve 16 K-pop groups, specifically 9 boy groups, 7 girls groups, of which half were split into 3rd and 4th generation. In order to get an even amount of boy and girl groups an additional two 3rd generation girl groups and one girl and boy group part of the 4th generation was added. These additional artist were chosen through research, and searched on Spotify. 
+
+In order receive a response from the API the following parameter, Spotify ID, which is a base-62 identifier found at the end of a Spotify URI,  was used to obtain relevant information regarding researched artist of interest. Relevant information was extracted from artist information and added to previous K-pop list. This list only contained information about the artist, like their followers, id, etc., however data regarding musical requirements of a song was the interest of study. Thus the top tracks for each artist was obtained along with the tracks audio features using GET verb. 
+
+
+## Variable selection 
+
+
+Many of the variables in the first list, containing information about the artist, provided information regarding location of artist on Spotify, like their id and url, which was not relevant to study. Thus only the artist name, popularity and followers were selected. As the groups in the list separate between gender and generation, which was not available through Spotify Web API, additional columns were manually constructed and labeled accordingly. Figure \@ref(fig:pop) shows the distribution of popularity of K-pop groups based on generation. It can be seen that 3rd generation groups occupy the ends of the graph, being the most and least popular on the Spotify platform, while 4th generation group are mainly in the middle. Figure \@ref(fig:follows) shows the distribution of Spotify followers which has a much larger overall difference between most followed and least followed. The most followed groups are 3rd generation while some of the least followed groups are of 4th generation. In fact, it can be seen that almost all 3rd generation groups have more followers the almost all 4th generation groups. This could be possibly due to the later debut date of 4th generation idols and a represent a growing fandom. The second data list contained information on the audio features of top tracks along with information of track location. Interested in understanding what defining audio features separate 4th generation from 3rd generation, the danceability, energy, key, mode, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, name, and popularity of top tracks were selected, along with album release date to compare any changes of features of music. Distributions of each variable is shown in Table \@ref(tab:summ)
+
+
+
+```{r pop, fig.cap="Distrubution of Spotify Popularity", echo = FALSE, fig.width=20, fig.height=7}
+kpop |>
+  #select(name, popularity, followers.total) |> 
+  ggplot(mapping = aes(x = reorder(name, -popularity), y = popularity, fill = generation)) +
+  geom_bar(stat = "identity")+ 
+  theme_bw()+
+  labs(x = "Kpop Groups",
+       y = "Spotify Popularity",
+       fill = "Gen")
 ```
 
 
 
-```{r billssssss, fig.cap="More bills of penguins", echo = FALSE, fig.width=8, fig.height=4}
+```{r follows, fig.cap="Distrubution of Spotify Followers", echo = FALSE, fig.width=20, fig.height=7}
+
+  kpop |>
+  #slice(1:10) |> 
+  #select(name, popularity, followers.total) |> 
+  ggplot(mapping = aes(x = reorder(name, -followers.total), y = followers.total, fill = generation)) +
+  geom_bar(stat = "identity")+
+  theme_bw()+
+  labs(x = "Kpop Groups",
+       y = "Spotify Followers",
+       fill = "Gen") 
 
 ```
 
-
+```{r summ, echo = FALSE}
+kpop_a |> 
+  datasummary_skim(type = "numeric",
+                   title = "Summary of audio features ditrubution")
+```
 
 
 # Model
 
+## Logistic regression
+
+The final dataset allowed for the investigation of what musical factors contribute to the separation of K-pop generation, in specific 3rd and 4th generation groups. As the variable of interest is binary, the regression model used was logistic. What we will get out of this regression is the probability of whether a group is 3rd or 4th generation based of the predictor variables. We are interested in estimating the equation $$ Pr(yi=1) = \beta_0 + \beta_1x_{i} + ... + \beta_jx_{ij} $$
+
+where, \
+- yi  is the response variable, \
+- xij are the possible predictor variables,\
+- $\beta_0$ the ‘intercept’, \
+- $\beta_1$ is the ‘slope’\
+
+```{r pred, echo = FALSE,  fig.width=30, fig.height=30}
+
+df <- data.frame(name=c('danceability','energy','key', 'mode','loudness','speechiness','acousticness','instrumentalness','liveness',
+                           'valence','tempo'), 
+                 discribtion=c('A value of 0.0 is least danceable and 1.0 is most danceable.','Measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity',
+                               'The key the track is in using standard Pitch Class notation.',
+                               'Mode indicates the modality (major or minor) of a track. Major is represented by 1 and minor is 0.',
+                               'The overall loudness of a track in decibels (dB) averaged across the entire track',
+                               'Detects the presence of spoken words in a track.',
+                               'A confidence measure from 0.0 to 1.0 of whether the track is acoustic',
+                               'Predicts whether a track contains no vocals.','Detects the presence of an audience in the recording.',
+                               'A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track.','The overall estimated tempo of a track in beats per minute (BPM).'))
+
+
+df |> 
+  kable(
+    caption = "Discribtion of Audio Features",
+    digits = 1,
+    booktabs = TRUE, 
+    linesep = "")
+
+```
+
+## Assumptions
+
+Before fitting any models, it was important to perform an exploratory data analysis in order to investigate the distributions of all variable. This was done through plotting each predictor variable seen in Table \@ref(tab:pred) against the response, generation of idol. This allowed for potential issues in the data set to be observed, as well as insight into possible predictor variable to include. As we are interested in fitting a Logistic Model, residual plots were not necessary, instead we were interested in checking the follow assumptions, dependant variable was binary, the observations to be impendent of each other, and there to be little or no multicollinearity among the independent variables. As the dependent variable is generation which can either be 3rd or 4th generation it is a binary variable. Multicollinearity was observed during model selection, focusing on achieving smallest AIC to maintain assumptions. 
+
+As we are focused on prediction, if we fit are model with all observations, it is possible to over fit data. In order to alleviate the limits on claims made, we divided out dataset into two independent datasets, the training set, which goes through the selection process, and the test set, which we will use to evaluate and validate the performance of produced model. In order to select the final model, we started with a model with one predictor and added variables one at a time and compare AIC to view multicollinearity. Variables to add were determined through results of relationship to response.
+
 
 # Results
 
+In order to determine what music features differ to define each generation, it was first necessary to take a look on the popularity of songs produced by each generation. Figure \@ref(fig:popsong) shows the distribution of song popularity divided by generation. It can be seen in each generation, most of the song are in range 60 - 70 in popularity. 3rd generation occupies the most and least popular songs while 4th is in the middle. This pattern was observed earlier with popularity of groups, indicating the likelihood that popular groups make popular songs. This is further seen through Figure \@ref(fig:popgrousp) as the groups with the more popular songs roughly correlates to the groups seen in Figure \@ref(fig:pop) that are more popular.  Due to fact the 4th generation has had less time to grow then 3rd, Figure \@ref(fig:popgrousp) does not provide information of specific time period of popularity, only showcasing overall popularity. Figure \@ref(fig:tiempop) helps against this problem by comparing song popularity to the release date of the album it was a part of. First we can see how 3rd generation groups have much more time to build the popularity of their songs. In 2019, the first record of a 4th generation song in this dataset, the average song popularity of 3rd gen can be seen above 4th generation. This is the result of a stead increase of popularity from their first record of song seen in 2014. Continually looking at the 3rd generation information, they have an increasing pattern observable until 2020 where they peak, and start to decrease in average popularity. 4th generation, however, has a steadily increasing pattern until 2021 and then a sharp increase in which they pass 3rd generation in popularity in 2022. This indicated a demand for 4th generation music from 2021 on wards. 
+
+```{r popsong, fig.cap= "Distribution of song popularity in generation", echo = FALSE, message=FALSE}
+  kpop_a |>
+    #filter(popularity < 20) |> 
+    ggplot(aes(x = popularity, fill = generation)) + 
+    geom_bar() +
+    labs(x = "Song popularity")
+```
+
+
+```{r popgrousp, fig.cap="Popularity of song based on group", echo = FALSE, message=FALSE}
+  kpop_a |>
+    group_by(generation, artist_name) |>
+    summarise(mean_pop = mean(popularity)) |>
+    arrange(-mean_pop) |>
+    #slice(1:5) |>
+    ggplot(aes(x = artist_name,
+               y = mean_pop)) +
+    geom_col() + 
+    facet_wrap(vars(generation), 
+               scales = "free_y",
+               nrow = 4) +
+    coord_flip()
+  
+```
+
+```{r tiempop, fig.cap="Popularity of song based on time", echo = FALSE, message=FALSE}
+ kpop_a |>
+    ggplot(aes(x = album.release_date,
+               y = popularity,
+               color = generation)) +
+    geom_point(alpha = 0.5) +
+    geom_smooth() +
+    theme_minimal() +
+    labs(x = "Album release date",
+         y = "Song popularity",
+         color = "Artist") +
+    scale_color_brewer(palette = "Set1")
+```
+
+
+
+```{r contin, fig.cap="Audio features against popularity" , echo = FALSE, message=FALSE , fig.width=15, fig.height=15}
+d<- kpop_a |> 
+    ggplot(mapping = aes(x = danceability, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  
+#doesnt seem to be a relation for dancebility and pop 
+
+  
+  e<- kpop_a |> 
+    ggplot(mapping = aes(x = energy, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  
+  loud <- 
+  kpop_a |> 
+    ggplot(mapping = aes(x = loudness, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  
+  #seems thAT LOUD MUSIC DOES BETER in 4th gen groups than 3rd gen 
+  
+  sp<- kpop_a |> 
+    ggplot(mapping = aes(x = speechiness, y = popularity)) +
+    geom_point() +
+    scale_x_log10() +
+    scale_y_log10()+
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  
+  ac <- kpop_a |> 
+    ggplot(mapping = aes(x = acousticness, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  is <- kpop_a |> 
+    ggplot(mapping = aes(x = instrumentalness, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  live <- kpop_a |> 
+    ggplot(mapping = aes(x = liveness, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  val<- kpop_a |> 
+    ggplot(mapping = aes(x = valence, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  
+  temp <- kpop_a |> 
+    ggplot(mapping = aes(x = tempo, y = popularity)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() +
+    facet_wrap(vars(generation),
+               dir = "v",
+               scales = "free")
+  
+  d + e + loud + sp + ac + is + live +val + temp
+```
+
+
+Now, with the interest of making our model, audio features were plotted against popularity to see if there are any discernible patterns different between generations. Figure \@ref(fig:contin)  containing the continuous audio features, show multiple graphs with same direction and slope. However, with further inspection, loudness speechiness, and liveness have opposite patterns. Loud 3rd generation music is not popular, while loud 4th generation is. The more appearance of liveness and speechiness does not seem to affect 3rd generation groups, however the present of live audio in 4th generation groups leads to less popularity of song, and the presents of speech in a song leads to more popular 4th generation music. While these results relate to popularity, further analysis on relationship of possible predictors was necessary to see if there was an observable difference over time. Figure \@ref(fig:againsttime) shows that over time loudness, energy, valence, and liveness of audio have decreased  while tempo and speechiness have increased. Other variables do not see to have changed, indicating a possible importance in kpop in general that does not change regardless of time. 
+
+
+```{r againsttime, echo = FALSE, fig.cap="Audio features against time" , fig.width=10, fig.height=10, message=FALSE}
+
+ dancc <-  kpop_a |> 
+    ggplot(aes(album.release_date, danceability, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+  ever <- kpop_a |> 
+    ggplot(aes(album.release_date, energy, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+  
+  louddd <- kpop_a |> 
+    ggplot(aes(album.release_date, loudness, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+  
+  speechhh <- kpop_a |> 
+    ggplot(aes(album.release_date, speechiness, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+  acc <- kpop_a |> 
+    ggplot(aes(album.release_date, acousticness, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+  instrume <- kpop_a |> 
+    ggplot(aes(album.release_date, instrumentalness, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+  livee <- kpop_a |> 
+    ggplot(aes(album.release_date, liveness, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+ vall <-  kpop_a |> 
+    ggplot(aes(album.release_date, valence, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() 
+
+  tempp <- kpop_a |> 
+    ggplot(aes(album.release_date, tempo, color = generation)) +
+    geom_point() +
+    geom_smooth(method = lm, color = "black", se = FALSE) +
+    theme_minimal() #Developing a goal for our analysis. For instance, in this case, it might be understanding 
+
+  #the factors such as stations and the time of day, that are associated with delays.
+# check what binomalis 
+ dancc + ever + louddd + speechhh + acc + instrume + livee + vall+ tempp
+```
+
+
+
+```{r modpre, fig.cap="MMMMMMM" , echo = FALSE,}
+set.seed(853)
+
+kpop_split <- initial_split(kpop_a, prop = 0.80)
+kpop_train <- training(kpop_split)
+kpop_test <- testing(kpop_split)
+  
+
+model_2 <- 
+  glm(generation ~loudness  +energy + key 
+       + valence+ album.release_date,
+      data = kpop_train,
+      family = 'binomial')
+
+  kpop_train_models2 <-
+   logistic_reg(mode = "classification") |>
+   set_engine("glm") |>
+   fit(generation ~loudness  +energy + key 
+       + valence+ album.release_date,
+       data = kpop_train)
+
+ g <- kpop_train_models2 |>
+  predict(new_data = kpop_test) |>
+  cbind(kpop_test) |>
+  conf_mat(truth = generation, estimate = .pred_class)
+ ggg <- data.frame('.'=rep(c('Prediction', '3rd Gen', '4th Gen'), each=1),
+                  Truth=rep(c('3rd Gen', '15', '4' ), times=1),
+                 ".."=(c("4th Gen", 6, 14)))
+ ggg |> 
+  kable(
+    caption = "Confusion Matrix",
+    digits = 1,
+    booktabs = TRUE, 
+    linesep = "")
+
+```
+
+
+```{r modres, echo = FALSE, message=FALSE}
+modl_plot <- broom::tidy(model_2, conf.int = T)
+model_plot_cof <-  modl_plot %>%
+  mutate(estimate = exp(estimate),
+         conf.low = exp(conf.low),
+         conf.high = exp(conf.high))
+
+
+modl_plot |> 
+  kable(
+    caption = "Final Model Results",
+    digits = 2,
+    booktabs = TRUE, 
+    linesep = "")
+
+```
+
+
+With the previous information the first predictor variable of interest was loudness, as there is clear dependence on time as well as generation. After a model was fit with single variable, multiple other models containing additional variables were added and compared to first model. In figure Table \@ref(tab:modres) the final model suggested was generation ~ loudness  +energy + key  + valence + album.release_date and Table \@ref(tab:modpre) shows the predicted values in comparison to actual results. The proportion of the estimatation that accurately predicted that the group was in 3rd generation was 79% while the proportion that accurately predicted that the group was 4th gen was 70%. Total efficiency of model, or percentage of the times that the test give the correct answer, was 74%. This model is a good start in predicting generation between 3rd and 4th, however, can be developed further to increase efficiency 
+
+
+
 # Discussion
 
-## Consumption differences 
+## Age and Generation Interest
+
+The final logistic model results show we can predict whether a group is 3rd or 4th generation based of the loudness of the music, the energy, key it is in, valence, and album release date. The music features shown to significantly predict 3rd generation music is softer with more energy, and often is in G major. This implies that 4th generation music, in comparison to 3rd generation, is much louder with less energy and not so often in G major. Exposure to loud music, especially by young people, has significantly increased in recent years as a result of advancements in technology in terms streaming of music through smart devices (@front). As 4th generation groups debut later, the average age is much less than that of 3rd generation, assuming they debut at the same average age. Since 3rd generation groups consist of individuals that have debuted from 2012-2016 it likely their fandom has grown with them, which is why the fandom of 4th generation groups can also be assumed as younger. Loud music has the ability to hijack other senses and especially the ability to think. Thus younger individuals tend to use loud music as a means of escape and to repress intense feelings and emotions and escape. Older individual also have means for wanting to repress undesired emotions, the difference however is the outlets presented to them. Loud music is a stimulate that can affects your body temperature and heart rate. Adults will tend to prefer stimulates like caffeine, alcohol, and sometimes other substances in order to achieve same results, these, however, are not available to those that are not of age. It is possible that preference of loud music by fandom is due to age represented and companies of 4th generation groups are aware of such and try to promote to receive popularity. This may also explain why 3rd generation music that is loud is not popular and 4th generation music is.  
+
+## Energy and Generation
 
 
-## The Role of Gender 
-
-## International Influences 
-
-## Weaknesses and next steps
+It was observed that in comparison to 3rd generation, 4th generation music has less energy. Studies show that depressed teens and adolescents spend a lot of their time listening to music. Rather than being the cause of mental illness, depressed adolescents rely on sad music for comfort (@sage). Without a lot of perceived energy to anything, music that relays internal feelings can help provide a relatable outlet and results in momentary relive from depression symptoms. Depression can exist among individuals of any age, and it is not unique to adolescent, however, teenager have less of an outlet to relieve symptoms. Mentioned earlier, many adults rely on substance to provide momentary happiness; these substances are not available for younger individuals. Access to professional care is paid service that young individuals cannot afford by them self as well as symptoms of depression are often dismissed as just being a teenage by guardians and supervisors. The younger audience of 4th generation groups may explain why they tend to offer music that is less energy to suit and comfort fans. 
 
 
+## Dancibility and Generation 
+
+The danceability of an audio track was seen to not to have significance in determining generation. It also was seen not to change throughout time, or influence popularity. The reason for such could be that danceability is a requirement for K-pop itself. The audio features selected were the top tracks of the artist, these are likely to be the promoted tracks or title track of the album. In the K-pop community, a title track will have a music video along with performance. In South Korea there are three large national television networks KBS, MBC, and SBS. SBS has Inkigayo, KBS has Music Bank, MBC has Show, which are popular music programs in which idols will perform their title tracks, along with other songs on the album they are trying to promote. Most performances consist of dancing, with only a few sit down singing acts. With such popularity in performance, danceability of a promoted song would be considered important regardless of generation and explains the results seen why danceability was constant over a multitude of comparisons. 
+
+## Weaknesses 
+
+Data mainly includes international inputs and thus cannot represent what the South Korean and Asian markets bring to the popularity of track. Tracks selected for observation were top tracks of artist, which may differ depending on popularity in region, and thus represent different features. As well popularity was not considered in the final model but may possibly influence what determines a third and fourth generation group. As new features are being preferred it is possible that dislike for older features exists, which is evident as 4th generation music has become increasingly popular in recent year, taking over 3rd generation just this year. Interest in determining 5th generation groups from this dataset may prove difficult as Asian markets now have access to Spotify which will result in the increase of use in upcoming years. As kpop has become more global, international input becomes more important, but this in no way alleviates the importance of their original market. A logistics regression can predict a binary variable, meaning the results of this study cannot predict what is a 5th generation group. Result, though, can help interpret what features are being preferred in recent years to apply to the debut of future generation K-pop idols. 
+
+
+## Next steps
+
+In response to these limitations, future steps can be taken to measure features of popular K-pop songs in Asian countries and compare with result from present research. In order to get a full interpretation of the change of musical requirements through generation, a study of inactive first- and second-generation groups can be done to further help predict what will succeed in future. What does well in the past does not always do well in the future, but forgotten trends to tend to repeat itself. Additional studies of repeated trends, if any, can be done in order to observe patterns in generational music. Comparison to western artists with the similar debut years may help to determine preferences between two music styles, and predict future deviations.
+ 
+```{r setupwarn, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
 
 \newpage
 
 \appendix
 
 # Appendix {-}
+
+# Datasheet 
+
+Extract of the questions from @gebru2021datasheets
+
+
+**Motivation**
+
+1. *For what purpose was the dataset created? Was there a specific task in mind? Was there a specific gap that needed to be filled? Please provide a description.*
+    - The dataset was created to establish the which audio features present to define generation in Kpop  
+2. *Who created the dataset (for example, which team, research group) and on behalf of which entity (for example, company, institution, organization)?*
+    - The data was created by Oluwabusayomi Adekuajo through the use of Spotify API. 
+3. *Who funded the creation of the dataset? If there is an associated grant, please provide the name of the grantor and the grant name and number.*
+    - The Spotify Web API is a free service
+4. *Any other comments?*
+    - NA
+
+**Composition**
+
+1. *What do the instances that comprise the dataset represent (for example, documents, photos, people, countries)? Are there multiple types of instances (for example, movies, users, and ratings; people and interactions between them; nodes and edges)? Please provide a description.*
+	-  The instances that the data set represent are top audio track features  there are 155 instances 
+2. *How many instances are there in total (of each type, if appropriate)?*
+	- There are 550 instances of each type oftop audio track features 
+3. *Does the dataset contain all possible instances or is it a sample (not necessarily random) of instances from a larger set? If the dataset is a sample, then what is the larger set? Is the sample representative of the larger set (for example, geographic coverage)? If so, please describe how this representativeness was validated/verified. If it is not representative of the larger set, please describe why not (for example, to cover a more diverse range of instances, because instances were withheld or unavailable).*
+	- The dataset does not contain all possible instances as some are not as related to data collected such as URI of audio track 
+4. *What data does each instance consist of? "Raw" data (for example, unprocessed text or images) or features? In either case, please provide a description.*
+	- Each instance consisted of raw data fro Spotify catalog  
+5. *Is there a label or target  associated with each instance? If so, please provide a description.*
+	- There is not target associated with each instance
+6. *Is any information missing from individual instances? If so, please provide a description, explaining why this information is missing (for example, because it was unavailable). This does not include intentionally removed information, but might include, for example, redacted text.*
+	- There is no data missing from individual instances
+7. *Are relationships between individual instances made explicit (for example, users' movie ratings, social network links)? If so, please describe how these relationships are made explicit.*
+	- Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo which was another instance. 
+8. *Are there recommended data splits (for example, training, development/validation, testing)? If so, please provide a description of these splits, explaining the rationale behind them.*
+	- The recommended data splits includes to split the training set into 80% of the ordingal data to avoid over fitting data.
+9. *Are there any errors, sources of noise, or redundancies in the dataset? If so, please provide a description.*
+	- There is not errors, sources of noise, or redundancies in the dataset
+10. *Is the dataset self-contained, or does it link to or otherwise rely on external resources (for example, websites, tweets, other datasets)? If it links to or relies on external resources, a) are there guarantees that they will exist, and remain constant, over time; b) are there official archival versions of the complete dataset (that is, including the external resources as they existed at the time the dataset was created); c) are there any restrictions (for example, licenses, fees) associated with any of the external resources that might apply to a dataset consumer? Please provide descriptions of all external resources and any restrictions associated with them, as well as links or other access points, as appropriate.*
+	- Data is linked to external resources, 
+	- a) It is likely to change overtime as it contantly collects user data 
+	- b) There are no official archival versions of the complete dataset
+	- c) Restriction include you much have a Spotify developers and Spotify account as authentication is needed. 
+11. *Does the dataset contain data that might be considered confidential (for example, data that is protected by legal privilege or by doctor-patient confidentiality, data that includes the content of individuals' non-public communications)? If so, please provide a description.*
+	- There is no data that might be considered confidential in dataset
+12. *Does the dataset contain data that, if viewed directly, might be offensive, insulting, threatening, or might otherwise cause anxiety? If so, please describe why.*
+	- There is no data that might be offensive, insulting, threatening, or might otherwise cause anxiety
+13. *Does the dataset identify any sub-populations (for example, by age, gender)? If so, please describe how these subpopulations are identified and provide a description of their respective distributions within the dataset.*
+	- This dataset has sub population divided by gender and generation. Gender include BG or boy group, and GG or girl group as well as 3rd and 4th gen identifiers. 
+14. *Is it possible to identify individuals (that is, one or more natural persons), either directly or indirectly (that is, in combination with other data) from the dataset? If so, please describe how.*
+	- It is not possible to identify individuals.
+15. *Does the dataset contain data that might be considered sensitive in any way (for example, data that reveals race or ethnic origins, sexual orientations, religious beliefs, political opinions or union memberships, or locations; financial or health data; biometric or genetic data; forms of government identification, such as social security numbers; criminal history)? If so, please provide a description.*
+	- Data contains no data that might be considered sensitive in any way
+16. *Any other comments?*
+	- NA
+
+**Collection process**
+
+1. *How was the data associated with each instance acquired? Was the data directly observable (for example, raw text, movie ratings), reported by subjects (for example, survey responses), or indirectly inferred/derived from other data (for example, part-of-speech tags, model-based guesses for age or language)? If the data was reported by subjects or indirectly inferred/derived from other data, was the data validated/verified? If so, please describe how.*
+	- The data was directly observable
+2. *What mechanisms or procedures were used to collect the data (for example, hardware apparatuses or sensors, manual human curation, software programs, software APIs)? How were these mechanisms or procedures validated?*
+	- Data acquired through use of Spotify Web API
+3. *If the dataset is a sample from a larger set, what was the sampling strategy (for example, deterministic, probabilistic with specific sampling probabilities)?*
+	- NA
+4. *Who was involved in the data collection process (for example, students, crowdworkers, contractors) and how were they compensated (for example, how much were crowdworkers paid)?*
+	- Data is collected through Spotify catalog and no one is paid
+5. *Over what timeframe was the data collected? Does this timeframe match the creation timeframe of the data associated with the instances (for example, recent crawl of old news articles)? If not, please describe the timeframe in which the data associated with the instances was created.*
+	- The data used has information from 2014 - 2022
+6. *Were any ethical review processes conducted (for example, by an institutional review board)? If so, please provide a description of these review processes, including the outcomes, as well as a link or other access point to any supporting documentation.*
+	- No ethical review processes
+7. *Did you collect the data from the individuals in question directly, or obtain it via third parties or other sources (for example, websites)?*
+	- Data was obtained through Spotify Web API with codes on how to do so on Spotify developers website 
+8. *Were the individuals in question notified about the data collection? If so, please describe (or show with screenshots or other information) how notice was provided, and provide a link or other access point to, or otherwise reproduce, the exact language of the notification itself.*
+	- Notice of collection is displayed in terms and service of Spotify users.  
+9. *Did the individuals in question consent to the collection and use of their data? If so, please describe (or show with screenshots or other information) how consent was requested and provided, and provide a link or other access point to, or otherwise reproduce, the exact language to which the individuals consented.*
+	- Individuals consent was collected through accepting Spotify terms and service. 
+10. *If consent was obtained, were the consenting individuals provided with a mechanism to revoke their consent in the future or for certain uses? If so, please provide a description, as well as a link or other access point to the mechanism (if appropriate).*
+	- It was not necessary to accept Spotify terms and service, if not planning to use Spotify 
+11. *Has an analysis of the potential impact of the dataset and its use on data subjects (for example, a data protection impact analysis) been conducted? If so, please provide a description of this analysis, including the outcomes, as well as a link or other access point to any supporting documentation.*
+	- An analysis of the potential impact of the dataset and its use on data subject was not conducted 
+12. *Any other comments?*
+	- NA
+
+**Preprocessing/cleaning/labeling**
+
+1. *Was any preprocessing/cleaning/labeling of the data done (for example, discretization or bucketing, tokenization, part-of-speech tagging, SIFT feature extraction, removal of instances, processing of missing values)? If so, please provide a description. If not, you may skip the remaining questions in this section.*
+	- Data was processed as PDF file and converted using R into a usable data fram 
+2. *Was the "raw" data saved in addition to the preprocessed/cleaned/labeled data (for example, to support unanticipated future uses)? If so, please provide a link or other access point to the "raw" data.*
+	- Raw data is saved in inputs/data/raw_data_popular.csv and inputs/data/raw_data_audio.csv
+3. *Is the software that was used to preprocess/clean/label the data available? If so, please provide a link or other access point.*
+	- Yes R software used to clean the data is available at https://www.r-project.org/
+4. *Any other comments?*
+	- NA
+
+**Uses**
+
+1. *Has the dataset been used for any tasks already? If so, please provide a description.*
+	- The  dataset has not been used for any tasks already 
+2. *Is there a repository that links to any or all papers or systems that use the dataset? If so, please provide a link or other access point.*
+	- https://github.com/rubyzero10/Final-paper-kpop.git
+3. *What (other) tasks could the dataset be used for?*
+	- The dataset could be used to see what features determine popularity of track. 
+4. *Is there anything about the composition of the dataset or the way it was collected and preprocessed/cleaned/labeled that might impact future uses? For example, is there anything that a dataset consumer might need to know to avoid uses that could result in unfair treatment of individuals or groups (for example, stereotyping, quality of service issues) or other risks or harms (for example, legal risks, financial harms)? If so, please provide a description. Is there anything a dataset consumer could do to mitigate these risks or harms?*
+	- There is nothing about the composition of the dataset that might impact future uses
+5. *Are there tasks for which the dataset should not be used? If so, please provide a description.*
+	- There are no tasks for which the dataset should not be used
+6. *Any other comments?*
+	- NA
+
+**Distribution**
+
+1. *Will the dataset be distributed to third parties outside of the entity (for example, company, institution, organization) on behalf of which the dataset was created? If so, please provide a description.*
+	- No the dataset will not be distributed to third parties outside of the entity 
+2. *How will the dataset be distributed (for example, tarball on website, API, GitHub)? Does the dataset have a digital object identifier (DOI)?*
+	- The dataset will be distributed throguh Github
+3. *When will the dataset be distributed?*
+	- The dataset will be distributed in April 2022
+4. *Will the dataset be distributed under a copyright or other intellectual property (IP) license, and/or under applicable terms of use (ToU)? If so, please describe this license and/ or ToU, and provide a link or other access point to, or otherwise reproduce, any relevant licensing terms or ToU, as well as any fees associated with these restrictions.*
+	- Dataset will not be  distributed under a copyright or other intellectual property (IP) license 
+5. *Have any third parties imposed IP-based or other restrictions on the data associated with the instances? If so, please describe these restrictions, and provide a link or other access point to, or otherwise reproduce, any relevant licensing terms, as well as any fees associated with these restrictions.*
+	- Third parties have not imposed IP-based or other restrictions on the data associated with the instances
+6. *Do any export controls or other regulatory restrictions apply to the dataset or to individual instances? If so, please describe these restrictions, and provide a link or other access point to, or otherwise reproduce, any supporting documentation.*
+	- No export controls or other regulatory restrictions apply to the dataset or to individual instances
+7. *Any other comments?*
+	- NA
+
+**Maintenance**
+
+1. *Who will be supporting/hosting/maintaining the dataset?*
+	- Oluwabusayomi Adekuajo 
+2. *How can the owner/curator/manager of the dataset be contacted (for example, email address)?*
+	- Via Github 
+3. *Is there an erratum? If so, please provide a link or other access point.*
+	- There is no erratum 
+4. *Will the dataset be updated (for example, to correct labeling errors, add new instances, delete instances)? If so, please describe how often, by whom, and how updates will be communicated to dataset consumers (for example, mailing list, GitHub)?*
+	- Dataset wil not be updated
+5. *If the dataset relates to people, are there applicable limits on the retention of the data associated with the instances (for example, were the individuals in question told that their data would be retained for a fixed period of time and then deleted)? If so, please describe these limits and explain how they will be enforced.*
+	- There are no applicable limits on the retention of the data associated with the instances
+6. *Will older versions of the dataset continue to be supported/hosted/maintained? If so, please describe how. If not, please describe how its obsolescence will be communicated to dataset consumers.*
+	- Older versions of the dataset will not continue to be maintained?
+7. *If others want to extend/augment/build on/contribute to the dataset, is there a mechanism for them to do so? If so, please provide a description. Will these contributions be validated/verified? If so, please describe how. If not, why not? Is there a process for communicating/distributing these contributions to dataset consumers? If so, please provide a description.*
+	- There is no mechanism for other to contribute to the dataset.
+8. *Any other comments?*
+	- NA
+
+
 
 
 # Additional details
